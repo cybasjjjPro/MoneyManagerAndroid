@@ -191,11 +191,13 @@ class MoneyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun buildCsvExport(): String {
         val sb = StringBuilder()
+        val q = '"'
         sb.appendLine("Date,Type,Account,ToAccount,Category,Subcategory,Amount,Note,Tags")
         _uiState.value.transactions.forEach { tx ->
-            val safeNote = tx.note.replace(""", """")
+            val safeNote = tx.note.replace(q.toString(), "$q$q")
+            val toName = if (tx.toAccountId != null) getAccountName(tx.toAccountId) else ""
             sb.appendLine(
-                "${tx.dateIso},${tx.type.name},"${getAccountName(tx.accountId)}","${if (tx.toAccountId != null) getAccountName(tx.toAccountId) else ""}","${tx.category}","${tx.subCategory}",${tx.amount},"$safeNote","${tx.tags}""
+                "${tx.dateIso},${tx.type.name},$q${getAccountName(tx.accountId)}$q,$q$toName$q,$q${tx.category}$q,$q${tx.subCategory}$q,${tx.amount},$q$safeNote$q,$q${tx.tags}$q"
             )
         }
         return sb.toString()
