@@ -97,8 +97,8 @@ fun AddEditTxDialog(
         val raw = quickText.trim()
         if (raw.isEmpty()) return
         val lower = raw.lowercase(Locale.US)
-        Regex("\b\d+(\.\d{1,2})?\b").find(raw)?.let { amountText = it.value }
-        val foundTags = Regex("#(\w+)").findAll(raw).map { it.groupValues[1] }.toList()
+        Regex("\\b\\d+(\\.\\d{1,2})?\\b").find(raw)?.let { amountText = it.value }
+        val foundTags = Regex("#(\\w+)").findAll(raw).map { it.groupValues[1] }.toList()
         if (foundTags.isNotEmpty()) tags = foundTags.joinToString(",")
 
         state.accounts.find { acc ->
@@ -124,7 +124,7 @@ fun AddEditTxDialog(
                 subCategory = "PT Sessions"
             }
         }
-        val cleanedNote = raw.replace(Regex("\b\d+(\.\d{1,2})?\b"), "").replace(Regex("#\w+"), "").trim()
+        val cleanedNote = raw.replace(Regex("\\b\\d+(\\.\\d{1,2})?\\b"), "").replace(Regex("#\\w+"), "").trim()
         if (cleanedNote.isNotEmpty()) note = cleanedNote.replaceFirstChar { it.uppercase() }
     }
 
